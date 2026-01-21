@@ -11,7 +11,7 @@
             }
 
             table, th, td {
-                font-size: 1.5em;
+                font-size: 1em;
                 background: #303030;
                 border: 1px solid #d0d0d0;
                 border-collapse: collapse;
@@ -48,7 +48,7 @@ function readTextFile(file) {
 }
 
 let rawdata = readTextFile("https://raw.githubusercontent.com/maybemabel/stuff/refs/heads/main/rawdata.txt").split("\n").filter(x => x != "");
-rawdata = rawdata.slice(rawdata.length - (18 * 6));
+// rawdata = rawdata.slice(rawdata.length - (18 * 6));
 const month_count = rawdata.length / 18;
 const types = "normal fire water electric grass ice fighting poison ground flying psychic bug rock ghost dragon dark steel fairy".split(" ");
 const data = Array.from(rawdata).map(x => x.split("	").pop());;
@@ -116,11 +116,12 @@ for(let i = 0; i < placements.length; ++i) {
         text += `\n<td style='color: #d0d0d0; background: ${"rgb("+(placements[i][p] - 1) * (255 / 32)+ ", " + (18 - (placements[i][p] - 1)) * (255/32) + ", " + (placements[i][p] < 4 ? 248 - (placements[i][p] - 1) * 60 : 0) + ");"}'>${placements[i][p] + num[placements[i][p]-1]}</td>`;
     }
     const sum = (placements[i].reduce((p, a) => p+a, 0) / month_count).toFixed(3);
+    const bonus_sum = (placements[i].slice(placements[i].length - 6).reduce((p, a) => p+a, 0) / 6).toFixed(3);
     // const oldsum = (placements[i].slice(0, placements[i].length - 1).reduce((p, a) => p+a, 0) / (month_count - 1)).toFixed(3);
     // console.log(`${types[i].padStart(8, " ")}   ${oldsum} -> ${sum} ${oldsum < sum ? "v" : oldsum > sum ? "^" : "="}`);
     averages.push([sum, types[i]]);
     text += `\n<td style='color: #d0d0d0; background: ${"rgb(" + (255 * (sum / 18)) + ", " + (255 - (255 * (sum / 18))) + ", " + (sum < 4 ? 248 - (sum - 1) * 60 : 0) + ");"}'>${sum}</td>`;
-    text += `\n<th>${Math.round(2 * (3 * sum - 3)) / 2}%</th>`
+    text += `\n<th>${Math.round(2 * (3 * bonus_sum - 3)) / 2}%</th>`
     text += `\n<th>${types[i]}</th>`;
     text += `\n</tr>`;
 
